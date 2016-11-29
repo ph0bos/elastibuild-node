@@ -1,0 +1,24 @@
+{
+  "name": "elastibuild",
+  "version": "0.0.3",
+  "description": "Elastibuild, A fluent builder for creating ElasticSearch compatible query JSON",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ph0bos/elasticsearch-query-builder-node.git"
+  },
+  "author": "Steven Robinson <steven@ph0bos.io> (https://github.com/ph0bos)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ph0bos/elasticsearch-query-builder-node/issues"
+  },
+  "homepage": "https://github.com/ph0bos/elasticsearch-query-builder-node#readme",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0",
+    "sinon": "^1.17.6"
+  }
+}
