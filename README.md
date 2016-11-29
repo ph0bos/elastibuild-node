@@ -1,13 +1,13 @@
-# ElasticSearch Query Builder
+# Elastibuild, A fluent builder for creating ElasticSearch compatible query JSON
 
-A builder for constructing ElasticSearch JSON queries via a fluent interface.
+Elastibuild, A fluent builder for creating ElasticSearch compatible query JSON.
 
 ## Basic Usage
 
 ```javascript
 'use strict';
 
-const QueryBuilder = require('elasticsearch-query-builder');
+const QueryBuilder = require('es-query-builder');
 
 const builder = QueryBuilder.buildQuery();
 
