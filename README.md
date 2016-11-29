@@ -7,13 +7,13 @@ Elastibuild, A fluent builder for creating ElasticSearch compatible query JSON.
 ```javascript
 'use strict';
 
-const QueryBuilder = require('es-query-builder');
+const QueryBuilder = require('elastibuild');
 
 const builder = QueryBuilder.buildQuery();
 
 builder.withMatch('my_field', 'field value');
-builder.withLimit(100);
-builder.withOffset(0);
+builder.withSize(100);
+builder.withFrom(0);
 
 const query = builder.build();
 
