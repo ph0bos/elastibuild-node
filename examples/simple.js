@@ -4,7 +4,8 @@ const QueryBuilder = require('../');
 
 const builder = QueryBuilder.buildQuery();
 
-builder.withMatch('my_field', 'field value');
+//builder.withMatch('my_field', 'field value');
+
 builder.withSize(100);
 builder.withFrom(0);
 
