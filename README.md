@@ -134,7 +134,7 @@ builder.withMatch('my_field_2', ['my_value_1', 'my_value_2']);
 
 ### ElastiBuild.withMustMatch(field, values);
 
-Return documents where the field value must match the provided values:
+Return documents where the field values must match the provided values:
 
 * `field` (`String`)
 * `values` (`Array` || `String`)

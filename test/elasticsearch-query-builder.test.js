@@ -30,6 +30,20 @@ describe('utils/elasticsearch-query-builder', function () {
     done();
   });
 
+  it('should successfully build a bool, must, match query by building an array of match queries', function (done) {
+    builder.withMustMatch("my_field", [ "my_value_1", "my_value_2" ]);
+
+    var query = builder.build();
+    should.exist(query.query.filtered.query.bool.must[0].match);
+    should.exist(query.query.filtered.query.bool.must[1].match);
+
+    query.query.filtered.query.bool.must[0].match.my_field.should.equal("my_value_1");
+    query.query.filtered.query.bool.must[1].match.my_field.should.equal("my_value_2");
+
+    done();
+  });
+
+
   it('should successfully build a multi-match query by converting a single "match" statement to a multiple "terms" statement', function (done) {
     builder.withMatch("my_field", [ "my_value_1", "my_value_2" ]);
 
@@ -173,7 +187,6 @@ describe('utils/elasticsearch-query-builder', function () {
 
   it('should not append a sort field when withSortUri is provided with an invalid uri', function (done) {
     builder.withMatch("my_field", "my_value");
-    builder.withSortUri("");
 
     var query = builder.build();
     should.not.exist(query.sort);
