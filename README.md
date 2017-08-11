@@ -2,6 +2,9 @@
 
 Elastibuild, a fluent builder for creating ElasticSearch compatible query JSON.
 
+Note: All constructed queries are compatible with Elastsearch 5.x only.
+
+
 ## Installing
 
 To utilize elastibuild for node.js install the the `npm` module:
@@ -218,9 +221,7 @@ builder.withTerms('my_field', 'my_value');
 
 ### ElastiBuild.withQueryString(fields, queryString, options);
 
-
 ### ElastiBuild.withQueryString(fields, queryString, options);
-
 
 ### ElastiBuild.withMustQueryString(fields, queryString, options);
 
@@ -241,7 +242,6 @@ builder.withTerms('my_field', 'my_value');
 ### ElastiBuild.withFieldExist(field, options);
 
 ### ElastiBuild.withMoreLikeThis(fields, id, options);
-
 
 ### ElastiBuild.build();
 
