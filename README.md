@@ -76,6 +76,19 @@ Returns a builder object to allow you to fluently build a query.
 const builder = ElastiBuild.buildQuery();
 ```
 
+### ElastiBuild.build();
+
+Build the actual JSON query using the provided parameters. This method returns Elasticsearch compatible JSON.
+
+```js
+const builder = ElastiBuild.buildQuery();
+
+// Some building...
+
+// Dump out the Elasticsearch query to console.
+console.log(buildder.build());
+```
+
 
 ### ElastiBuild.withFrom(fromValue);
 
@@ -241,8 +254,6 @@ builder.withTerms('my_field', 'my_value');
 ### ElastiBuild.withFieldExist(field, options);
 
 ### ElastiBuild.withMoreLikeThis(fields, id, options);
-
-### ElastiBuild.build();
 
 
 
