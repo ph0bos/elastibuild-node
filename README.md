@@ -280,42 +280,111 @@ builder.withShouldQueryString(['my_field_1', 'my_field_2'], 'foo AND bar', { boo
 
 Applies a must filter to the query.
 
+* `field` (`String`)
+* `values` (`Array` || `String`)
+
+A single value example:
+
+```js
+builder.withMustFilter('my_field', 'my_value');
+```
+
 
 ### ElastiBuild.withShouldFilter(field, values);
 
 Applies a should filter to the query.
+
+* `field` (`String`)
+* `values` (`Array` || `String`)
+
+A single value example:
+
+```js
+builder.withShouldFilter('my_field', 'my_value');
+```
 
 
 ### ElastiBuild.withMustNotFilter(field, values);
 
 Applies a must_not filter to the query.
 
+* `field` (`String`)
+* `values` (`Array` || `String`)
+
+A single value example:
+
+```js
+builder.withMustNotFilter('my_field', 'my_value');
+```
+
 
 ### ElastiBuild.withRange(field, values);
 
 Returns documents within the provided range.
+
+* `field` (`String`)
+* `range` (`Object`)
+
+A single value example:
+
+```js
+builder.withRange("timestamp", { gte: "1970-01-01", lte: "1970-01-01" });
+```
 
 
 ### ElastiBuild.withSort(field, order);
 
 Sorts the returned documents using the provided field and direction.
 
+* `field` (`String`)
+* `order` (`Object`)
+
+```js
+builder.withSort("my_field", "desc");
+```
 
 ### ElastiBuild.withSortUri(uris);
 
 Sorts the returned documents using the provided sort uri.
+
+* `uris` (`Array`)
+
+Example with a field and order:
+
+```js
+builder.withSortUri("my_field:desc");
+```
+
+Example with a field, order and mode:
+
+```js
+builder.withSortUri("my_field:desc:min");
+```
 
 
 ### ElastiBuild.withFieldExist(field, options);
 
 Returns documents containing the provided field.
 
+* `field` (`String`)
+* `options` (`Object`)
+
+```js
+builder.withFieldExist("my_field");
+```
+
 
 ### ElastiBuild.withMoreLikeThis(fields, id, options);
 
 Returns documents that are "like" the provided document id.
 
+* `fields` (`Array`)
+* `id` (`String`)
+* `options` (`Object`)
 
+```js
+builder.withMoreLikeThis(["my_field_1", "my-field-2"], "my-id", { min_term_freq: 4, minimum_should_match: "90%" });
+```
 
 
 
