@@ -46,7 +46,7 @@ const query = builder.build();
 console.log(query);
 ```
 
-This example would produce the the following console output:
+This example would produce the following console output:
 
 ```js
 {
@@ -233,28 +233,57 @@ builder.withTerms('my_field', 'my_value');
 
 ### ElastiBuild.withQueryString(fields, queryString, options);
 
-### ElastiBuild.withQueryString(fields, queryString, options);
+Returns documents matching the provided query_string.
+
 
 ### ElastiBuild.withMustQueryString(fields, queryString, options);
 
+Returns documents which must match the provided query_string.
+
+
 ### ElastiBuild.withShouldQueryString(fields, queryString, options);
+
+Returns documents which should match the provided query_string.
+
 
 ### ElastiBuild.withMustFilter(field, values);
 
+Applies a must filter to the query.
+
+
 ### ElastiBuild.withShouldFilter(field, values);
+
+Applies a should filter to the query.
+
 
 ### ElastiBuild.withMustNotFilter(field, values);
 
+Applies a must_not filter to the query.
+
+
 ### ElastiBuild.withRange(field, values);
+
+Returns documents within the provided range.
+
 
 ### ElastiBuild.withSort(field, order);
 
+Sorts the returned documents using the provided field and direction.
+
+
 ### ElastiBuild.withSortUri(uris);
+
+Sorts the returned documents using the provided sort uri.
+
 
 ### ElastiBuild.withFieldExist(field, options);
 
+Returns documents containing the provided field.
+
+
 ### ElastiBuild.withMoreLikeThis(fields, id, options);
 
+Returns documents that are "like" the provided document id.
 
 
 
