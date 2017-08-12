@@ -2,7 +2,11 @@
 
 Elastibuild, a fluent builder for creating ElasticSearch compatible query JSON.
 
-Note: All constructed queries are compatible with Elastsearch 5.x only.
+
+## Compatibility
+
+* Targets Node 6.x and above.
+* All constructed queries are compatible with Elasticsearch 5.x and above.
 
 
 ## Installing

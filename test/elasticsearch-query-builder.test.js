@@ -219,6 +219,25 @@ describe('utils/elasticsearch-query-builder', function () {
     done();
   });
 
+  it('should successfully build a should match query when provided with a valid array of fields, a query string and options', function (done) {
+    builder.withShouldMatchQueryString([ "headline", "description_text" ], "corbyn AND fire", { boost: 100, use_dis_max: true });
+
+    const q = builder.build();
+    should.exist(q.query.bool.filter.bool.should[0].query_string);
+
+    done();
+  });
+
+
+  it('should successfully build a match query when provided with a valid array of fields, a query string and options', function (done) {
+    builder.withMatchQueryString([ "headline", "description_text" ], "corbyn AND fire", { boost: 100, use_dis_max: true });
+
+    const q = builder.build();
+    should.exist(q.query.bool.must[0].query_string);
+
+    done();
+  });
+
   it('should successfully build a range query when provided with valid single field range properties', function (done) {
     builder.withRange("timestamp", { gte: "1970-01-01", lte: "1970-01-01" });
 
@@ -281,6 +300,93 @@ describe('utils/elasticsearch-query-builder', function () {
 
     const q = builder.build();
     q.size.should.equal(100);
+
+    done();
+  });
+
+  it('should successfully apply a must filter when provided with a property and array value', function (done) {
+    builder.withMatch("my_field", "my_value");
+    builder.withSortUri("my_field:asc");
+    builder.withMustFilter(
+      "object.code", [
+        "pacontent:paservice:news.story.composite",
+        "pacontent:paservice:sport.story.composite"
+      ]
+    );
+
+    const q = builder.build();
+
+    should.exist(q.sort);
+    q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+    should.exist(q.query.bool.must);
+    q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+    should.exist(q.query.bool.filter);
+    q.query.bool.filter.bool.should.deep.equal({ "must": [{ "terms": { "object.code": [ "pacontent:paservice:news.story.composite", "pacontent:paservice:sport.story.composite" ] }}]});
+
+    done();
+  });
+
+  it('should successfully apply a must_not filter when provided with a property and array value', function (done) {
+    builder.withMatch("my_field", "my_value");
+    builder.withSortUri("my_field:asc");
+    builder.withMustNotFilter(
+      "object.code", [
+        "pacontent:paservice:news.story.composite",
+        "pacontent:paservice:sport.story.composite"
+      ]
+    );
+
+    const q = builder.build();
+
+    should.exist(q.sort);
+    q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+    should.exist(q.query.bool.must);
+    q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+    should.exist(q.query.bool.filter);
+    q.query.bool.filter.bool.should.deep.equal({ "must_not": [{ "terms": { "object.code": [ "pacontent:paservice:news.story.composite", "pacontent:paservice:sport.story.composite" ] }}]});
+
+    done();
+  });
+
+  it('should successfully apply a should filter when provided with a property and array value', function (done) {
+    builder.withMatch("my_field", "my_value");
+    builder.withSortUri("my_field:asc");
+    builder.withShouldFilter(
+      "object.code", [
+        "pacontent:paservice:news.story.composite",
+        "pacontent:paservice:sport.story.composite"
+      ]
+    );
+
+    const q = builder.build();
+
+    should.exist(q.sort);
+    q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+    should.exist(q.query.bool.must);
+    q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+    should.exist(q.query.bool.filter);
+    q.query.bool.filter.should.deep.equal({ "bool": { "should": [{ "terms": { "object.code": [ "pacontent:paservice:news.story.composite", "pacontent:paservice:sport.story.composite" ] }}]}});
+
+    done();
+  });
+
+  it('should successfully apply a should filter when provided with a property and array value', function (done) {
+    builder.withMatch("my_field", "my_value");
+    builder.withFieldExist("my_field");
+
+    const q = builder.build();
+
+    should.exist(q.query.bool.must);
+    q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+    should.exist(q.query.bool.filter.bool.must);
+    q.query.bool.filter.bool.must.should.deep.equal([ { "exists": { "field": "my_field" }}]);
 
     done();
   });
