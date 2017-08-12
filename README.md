@@ -235,15 +235,45 @@ builder.withTerms('my_field', 'my_value');
 
 Returns documents matching the provided query_string.
 
+* `fields` (`Array`)
+* `queryString` (`String`)
+* `options` (`Object`)
+
+An example usage is as follows:
+
+```js
+builder.withQueryString(['my_field_1', 'my_field_2'], 'foo AND bar', { boost: 100, use_dis_max: true });
+```
+
 
 ### ElastiBuild.withMustQueryString(fields, queryString, options);
 
 Returns documents which must match the provided query_string.
 
+* `fields` (`Array`)
+* `queryString` (`String`)
+* `options` (`Object`)
+
+An example usage is as follows:
+
+```js
+builder.withMustQueryString(['my_field_1', 'my_field_2'], 'foo AND bar', { boost: 100, use_dis_max: true });
+```
+
 
 ### ElastiBuild.withShouldQueryString(fields, queryString, options);
 
 Returns documents which should match the provided query_string.
+
+* `fields` (`Array`)
+* `queryString` (`String`)
+* `options` (`Object`)
+
+An example usage is as follows:
+
+```js
+builder.withShouldQueryString(['my_field_1', 'my_field_2'], 'foo AND bar', { boost: 100, use_dis_max: true });
+```
 
 
 ### ElastiBuild.withMustFilter(field, values);
