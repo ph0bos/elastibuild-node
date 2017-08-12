@@ -51,21 +51,16 @@ This example would produce the the following console output:
 ```js
 {
   "query": {
-  "filtered": {
-    "query": {
-      "bool": {
-        "must": [
-          {
-            "match": {
-              "my_field": "field value"
-            }
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "my_field": "field value"
           }
-        ]
-      }
-    },
-    "filter": {}
-  }
-},
+        }
+      ]
+    }
+  },
   "size": 100,
   "from": 0
 }
