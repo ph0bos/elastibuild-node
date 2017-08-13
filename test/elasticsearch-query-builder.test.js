@@ -253,13 +253,13 @@ describe('utils/elasticsearch-query-builder', function () {
 
     const q = builder.build();
 
-    should.exist(q.query.more_like_this);
-    should.exist(q.query.more_like_this.fields);
+    should.exist(q.query.bool.must[0].more_like_this);
+    should.exist(q.query.bool.must[0].more_like_this.fields);
 
-    q.query.more_like_this.fields[0].should.equal("my_field_1");
-    q.query.more_like_this.docs[0]._id.should.equal("my-id");
-    q.query.more_like_this.min_term_freq.should.equal(3);
-    q.query.more_like_this.minimum_should_match.should.equal("30%");
+    q.query.bool.must[0].more_like_this.fields[0].should.equal("my_field_1");
+    q.query.bool.must[0].more_like_this.docs[0]._id.should.equal("my-id");
+    q.query.bool.must[0].more_like_this.min_term_freq.should.equal(3);
+    q.query.bool.must[0].more_like_this.minimum_should_match.should.equal("30%");
 
     done();
   });
@@ -269,12 +269,12 @@ describe('utils/elasticsearch-query-builder', function () {
 
     const q = builder.build();
 
-    should.exist(q.query.more_like_this);
-    should.exist(q.query.more_like_this.fields);
-    q.query.more_like_this.fields[0].should.equal("my_field_1");
-    q.query.more_like_this.docs[0]._id.should.equal("my-id");
-    q.query.more_like_this.min_term_freq.should.equal(4);
-    q.query.more_like_this.minimum_should_match.should.equal("90%");
+    should.exist(q.query.bool.must[0].more_like_this);
+    should.exist(q.query.bool.must[0].more_like_this.fields);
+    q.query.bool.must[0].more_like_this.fields[0].should.equal("my_field_1");
+    q.query.bool.must[0].more_like_this.docs[0]._id.should.equal("my-id");
+    q.query.bool.must[0].more_like_this.min_term_freq.should.equal(4);
+    q.query.bool.must[0].more_like_this.minimum_should_match.should.equal("90%");
 
     done();
   });
