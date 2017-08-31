@@ -424,4 +424,35 @@ describe('utils/elasticsearch-query-builder', function () {
 
     done();
   });
+
+  it('should successfully apply _source field when withField() is provided with a valid input', function (done) {
+    builder.withField("_source", {"enabled": false});
+
+    const q = builder.build();
+
+    should.exist(q._source);
+    q._source.should.deep.equal({"enabled": false});
+
+    done();
+  });
+
+  it('should not apply a field when withField() is provided with an invalid field input (null)', function (done) {
+    builder.withField(null, {"foo": false});
+
+    const q = builder.build();
+
+    q.should.deep.equal({"query": {"bool": {"must": {"match_all": {}}}}});
+
+    done();
+  });
+
+  it('should not apply a field when withField() is provided with an invalid field input (object)', function (done) {
+    builder.withField({}, {"foo": false});
+
+    const q = builder.build();
+
+    q.should.deep.equal({"query": {"bool": {"must": {"match_all": {}}}}});
+
+    done();
+  });
 });
