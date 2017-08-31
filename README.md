@@ -377,9 +377,48 @@ builder.withSortObject([{ post_date : {order : "asc"}}]);
 Example with an object:
 
 ```js
-builder.withSortObject({my_field: {type: "number", order: "desc"}});
+let inputObject = {
+      "_script": {
+        "type": "number",
+        "order": "desc",
+        "script": {
+          "lang": "eng",
+          "inline": "if (doc['version'].value > 0) { doc['version'].value } else { doc['firstcreated'].value }"
+        }
+      }
+    };
 ```
 
+```js
+builder.withSortObject(inputObject);
+```
+
+This example would produce the following console output:
+
+```js
+{
+  "query": {
+    "bool": {
+      "must": {
+        "match_all": {}
+      }
+    }
+  },
+  "sort": {
+    "my_type": {
+      "_source": {
+        "includes": [
+          "path1.*",
+          "path2.*"
+        ],
+        "excludes": [
+          "path3.*"
+        ]
+      }
+    }
+  }
+}
+```
 
 ### ElastiBuild.withFieldExist(field, options);
 
