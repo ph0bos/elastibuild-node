@@ -147,6 +147,25 @@ builder.withMatch('my_field_2', ['my_value_1', 'my_value_2']);
 ```
 
 
+### ElastiBuild.withMatchAll(value);
+
+Constructs a simple match all query. Matches all documents that match the value provided:
+
+* `value` (`Object`)
+
+Match all documents example:
+
+```js
+builder.withMatchAll({});
+```
+
+Boost parameter example:
+
+```js
+builder.withMatchAll({ "boost" : 1.2 });
+```
+
+
 ### ElastiBuild.withMustMatch(field, values);
 
 Return documents where the field values must match the provided values:
