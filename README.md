@@ -86,7 +86,7 @@ const builder = ElastiBuild.buildQuery();
 // Some building...
 
 // Dump out the Elasticsearch query to console.
-console.log(buildder.build());
+console.log(builder.build());
 ```
 
 
