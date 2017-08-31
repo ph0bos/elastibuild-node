@@ -490,4 +490,39 @@ describe('lib/elasticsearch-query-builder', function () {
       done();
     });
   });
+
+  describe('withMatchAll()', function () {
+    it('should successfully create a match all query when provided with valid input ({})', function (done) {
+      builder.withMatchAll({});
+
+      const q = builder.build();
+
+      should.exist(q.query.match_all);
+      q.should.deep.equal({query: {match_all: {}}});
+
+      done();
+    });
+
+    it('should successfully create a match all query when provided with valid input ({ "boost" : 1.2 })', function (done) {
+      builder.withMatchAll({ "boost" : 1.2 });
+
+      const q = builder.build();
+
+      should.exist(q.query.match_all);
+      q.should.deep.equal({query: {match_all: {"boost": 1.2}}});
+
+      done();
+    });
+
+    it('should not create a match all query when provided with invalid input (null) resulting in default bool must query', function (done) {
+      builder.withMatchAll(null);
+
+      const q = builder.build();
+
+      should.not.exist(q.query.match_all);
+      q.query.should.deep.equal({"bool": { "must": { "match_all": {}}}});
+
+      done();
+    });
+  });
 });
