@@ -362,6 +362,25 @@ builder.withSortUri("my_field:desc:min");
 ```
 
 
+### ElastiBuild.withSortObject(sortObject);
+
+Sorts the returned documents using the provided sort object (for complex queries).
+
+* `sortObject` (`Array/Object`)
+
+Example with an array:
+
+```js
+builder.withSortObject([{ post_date : {order : "asc"}}]);
+```
+
+Example with an object:
+
+```js
+builder.withSortObject({my_field: {type: "number", order: "desc"}});
+```
+
+
 ### ElastiBuild.withFieldExist(field, options);
 
 Returns documents containing the provided field.
@@ -371,6 +390,18 @@ Returns documents containing the provided field.
 
 ```js
 builder.withFieldExist("my_field");
+```
+
+
+### ElastiBuild.withField(field, value);
+
+Allowing further customisation, appends additional field to the query. Returns documents containing the provided field. 
+
+* `field` (`String`)
+* `options` (`Any`)
+
+```js
+builder.withField("my_field", {value: 'some_value'});
 ```
 
 
