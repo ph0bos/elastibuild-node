@@ -190,6 +190,40 @@ describe('utils/elasticsearch-query-builder', function () {
     done();
   });
 
+  it('should append a sort field when withSortObject is provided with a sorting object', function (done) {
+    builder.withSortObject({_foo: {order: 'desc', nest: {value: 'some value'}}});
+
+    const query = builder.build();
+    query.sort.should.exist;
+    query.should.deep.equal({"query":{"bool":{"must":{"match_all":{}}}},"sort":{"_foo":{"order":"desc","nest":{"value":"some value"}}}});
+    done();
+  });
+
+  it('should append a sort field when withSortObject is provided with a sorting array', function (done) {
+    builder.withSortObject([{postDate: {order: "asc"}}]);
+
+    const query = builder.build();
+    query.sort.should.exist;
+    query.should.deep.equal({"query":{"bool":{"must":{"match_all":{}}}},"sort": [{postDate: {order: "asc"}}]});
+    done();
+  });
+
+  it('should not append a sort field when withSortObject is provided with a non array or non object input (integer)', function (done) {
+    builder.withSortObject(3);
+
+    const query = builder.build();
+    query.should.deep.equal({"query":{"bool":{"must":{"match_all":{}}}}});
+    done();
+  });
+
+  it('should not append a sort field when withSortObject is provided with a non array or non object input (string)', function (done) {
+    builder.withSortObject('foo');
+
+    const query = builder.build();
+    query.should.deep.equal({"query":{"bool":{"must":{"match_all":{}}}}});
+    done();
+  });
+
   it('should not append a sort field when withSortUri is provided with an invalid uri', function (done) {
     builder.withMatch("my_field", "my_value");
 
@@ -387,6 +421,37 @@ describe('utils/elasticsearch-query-builder', function () {
 
     should.exist(q.query.bool.filter.bool.must);
     q.query.bool.filter.bool.must.should.deep.equal([ { "exists": { "field": "my_field" }}]);
+
+    done();
+  });
+
+  it('should successfully apply _source field when withField() is provided with a valid input', function (done) {
+    builder.withField("_source", {"enabled": false});
+
+    const q = builder.build();
+
+    should.exist(q._source);
+    q._source.should.deep.equal({"enabled": false});
+
+    done();
+  });
+
+  it('should not apply a field when withField() is provided with an invalid field input (null)', function (done) {
+    builder.withField(null, {"foo": false});
+
+    const q = builder.build();
+
+    q.should.deep.equal({"query": {"bool": {"must": {"match_all": {}}}}});
+
+    done();
+  });
+
+  it('should not apply a field when withField() is provided with an invalid field input (object)', function (done) {
+    builder.withField({}, {"foo": false});
+
+    const q = builder.build();
+
+    q.should.deep.equal({"query": {"bool": {"must": {"match_all": {}}}}});
 
     done();
   });

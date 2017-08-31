@@ -1,6 +1,6 @@
 {
   "name": "elastibuild",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Elastibuild, A fluent builder for creating ElasticSearch compatible query JSON",
   "main": "index.js",
   "scripts": {
