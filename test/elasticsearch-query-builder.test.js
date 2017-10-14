@@ -525,4 +525,83 @@ describe('lib/elasticsearch-query-builder', function () {
       done();
     });
   });
+
+  describe('withMustFilterObject()', function () {
+    it('should successfully apply a must filter when provided a partial query object', function (done) {
+      builder.withMatch("my_field", "my_value");
+      builder.withSortUri("my_field:asc");
+      builder.withMustFilter(
+        "object.code", [
+          "pacontent:paservice:news.story.composite",
+          "pacontent:paservice:sport.story.composite"
+        ]
+      );
+      builder.withMustFilterObject({
+        bool: {
+          should: [
+            {
+              terms: {
+                fooProp: [ "barValue" ]
+              }
+            },
+            {
+              bool: {
+                must_not: {
+                  match: {
+                    bazProp: [ "barValue" ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      });
+
+      const q = builder.build();
+
+      should.exist(q.sort);
+      q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+      should.exist(q.query.bool.must);
+      q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.filter.bool.should.deep.equal({
+        "must": [
+          {
+            "terms": {
+              "object.code": [
+                "pacontent:paservice:news.story.composite",
+                "pacontent:paservice:sport.story.composite"
+              ]
+            }
+          },
+          {
+            "bool": {
+              "should": [
+                {
+                  "terms": {
+                    "fooProp": [
+                      "barValue"
+                    ]
+                  }
+                },
+                {
+                  bool: {
+                    must_not: {
+                      match: {
+                        bazProp: [ "barValue" ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      });
+
+      done();
+    });
+  });
 });

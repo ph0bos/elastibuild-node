@@ -309,6 +309,38 @@ builder.withMustFilter('my_field', 'my_value');
 ```
 
 
+### ElastiBuild.withMustFilterObject(partialQueryObject);
+
+Applies a complex must filter to the query.
+
+* `partialQueryObject` (`Object`)
+
+A complex nested sub-query example:
+
+```js
+builder.withMustFilterObject({
+  bool: {
+    should: [
+      {
+        terms: {
+          fooProp: [ "barValue" ]
+        }
+      },
+      {
+        bool: {
+          must_not: {
+            match: {
+              bazProp: [ "barValue" ]
+            }
+          }
+        }
+      }
+    ]
+  }
+});
+```
+
+
 ### ElastiBuild.withShouldFilter(field, values);
 
 Applies a should filter to the query.
