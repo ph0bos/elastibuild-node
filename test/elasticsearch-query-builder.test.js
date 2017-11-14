@@ -283,6 +283,17 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should allow you to pass in a default_operator', function (done) {
+      builder.withShouldMatchQueryString([ "headline", "description_text" ], "corbyn fire", { default_operator: 'AND' });
+
+      const q = builder.build();
+      should.exist(q.query.bool.filter.bool.should[0].query_string);
+      should.exist(q.query.bool.filter.bool.should[0].default_operator);
+      q.query.bool.filter.bool.should[0].default_operator.should.equal('AND');
+
+      done();
+    });
   });
 
   describe('withMatchQueryString()', function () {
