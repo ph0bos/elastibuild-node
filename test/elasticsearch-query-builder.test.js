@@ -289,8 +289,8 @@ describe('lib/elasticsearch-query-builder', function () {
 
       const q = builder.build();
       should.exist(q.query.bool.filter.bool.should[0].query_string);
-      should.exist(q.query.bool.filter.bool.should[0].default_operator);
-      q.query.bool.filter.bool.should[0].default_operator.should.equal('AND');
+      should.exist(q.query.bool.filter.bool.should[0].query_string.default_operator);
+      q.query.bool.filter.bool.should[0].query_string.default_operator.should.equal('AND');
 
       done();
     });
