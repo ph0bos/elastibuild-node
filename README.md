@@ -228,13 +228,64 @@ builder.withNotMatch('my_field_2', ['my_value_1', 'my_value_2']);
 
 ### ElastiBuild.withGeoDistance(fields, lat, long, distance);
 
-Return documents where the geo distance matches the provided values:
+Return documents where the geo distance matches the provided values, based on a geo_point circle query:
 
 * `fields` (`Array`)
 * `lat` (`Number`)
 * `long` (`Number`)
 * `distance` (`String`)
 
+### ElastiBuild.withGeoCircle(fields, lat, long, radius, relation);
+
+Return documents where the shape or location fields matche a geo_shape circle query, where the default relation is `intersects`.
+This default relation matches all documents whose geo_shape indexed location or shape intersects with the submitted circle.
+
+* `fields` (`Array`)
+* `lat` (`Number`)
+* `long` (`Number`)
+* `radius` (`String`)
+* `relation` (`String`)
+
+The `radius` value defaults to metres so a unit can be omitted, but other units are supported by ES such as "100km".
+
+The `relation` value defaults to "intersects", but can also be:
+
+* `intersects` - Matches documents whose location or shape intersects with the circle
+* `within` - Matches documents whose location or shape is within the circle
+* `contains` - Matches documents whose location or shape contains the circle
+* `disjoint` - Matches document whose location or shape has nothing in common with the circle e.g. outside or does not contain 
+
+A geo circle example:
+
+```js
+builder.withGeoCircle(['my_field1', 'my_field2'], 12.45, 45.65, '1000');
+```
+
+A geo circle example with alternative radius units:
+
+```js
+builder.withGeoCircle(['my_field1', 'my_field2'], 12.45, 45.65, '1000km');
+```
+
+A geo circle example with a within relation:
+
+```js
+builder.withGeoCircle(['my_field1', 'my_field2'], 12.45, 45.65, '1000', 'within');
+```
+
+### ElastiBuild.withGeoLocation(fields, lat, long);
+
+Return documents where the indexed geo_shape fields contain the provided location.
+
+* `fields` (`Array`)
+* `lat` (`Number`)
+* `long` (`Number`)
+
+A simple geo location example:
+
+```js
+builder.withGeoLocation(['my_field1', 'my_field2'], 12.45, 45.65);
+```
 
 ### ElastiBuild.withTerms(field, values);
 
@@ -248,7 +299,6 @@ A single value example:
 ```js
 builder.withTerms('my_field', 'my_value');
 ```
-
 
 ### ElastiBuild.withQueryString(fields, queryString, options);
 
