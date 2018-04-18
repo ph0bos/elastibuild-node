@@ -634,8 +634,8 @@ describe('lib/elasticsearch-query-builder', function () {
                       "relation": "intersects",
                       "shape": {
                         "coordinates": [
-                          1.23,
-                          4.56
+                          4.56,
+                          1.23
                         ],
                         "radius": "678km",
                         "type": "circle"
@@ -669,8 +669,8 @@ describe('lib/elasticsearch-query-builder', function () {
                       "relation": "contains",
                       "shape": {
                         "coordinates": [
-                          1.23,
-                          4.56
+                          4.56,
+                          1.23
                         ],
                         "radius": "678km",
                         "type": "circle"
@@ -706,8 +706,8 @@ describe('lib/elasticsearch-query-builder', function () {
                       "relation": "contains",
                       "shape": {
                         "coordinates": [
-                          1.23,
-                          4.56
+                          4.56,
+                          1.23
                         ],
                         "type": "point"
                       }
