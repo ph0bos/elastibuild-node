@@ -77,7 +77,7 @@ describe('lib/elasticsearch-query-builder', function () {
     });
   });
 
-  describe.only('withSearchAfter()', function() {
+  describe('withSearchAfter()', function() {
     it('should successfully set a search_after field with a single value', function (done) {
       builder.withMatch('my_field', 'my_value');
       builder.withSearchAfter('some_value');
