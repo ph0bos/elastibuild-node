@@ -431,7 +431,15 @@ A single value example:
 ```js
 builder.withRange("timestamp", { gte: "1970-01-01", lte: "1970-01-01" });
 ```
+### ElastiBuild.withSearchAfter(values);
 
+Sets the search after values for scrolling pages.
+
+* `values` (`Array`)
+
+```js
+builder.withSearchAfter(["first_value", 12345]);
+```
 
 ### ElastiBuild.withSort(field, order);
 
