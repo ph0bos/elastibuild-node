@@ -18,7 +18,7 @@
   "homepage": "https://github.com/ph0bos/elasticsearch-query-builder-node#readme",
   "devDependencies": {
     "chai": "1.10.0",
-    "mocha": "2.1.0",
+    "mocha": "^5.2.0",
     "sinon": "1.17.6"
   }
 }

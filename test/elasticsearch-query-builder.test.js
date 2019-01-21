@@ -77,6 +77,38 @@ describe('lib/elasticsearch-query-builder', function () {
     });
   });
 
+  describe.only('withSearchAfter()', function() {
+    it('should successfully set a search_after field with a single value', function (done) {
+      builder.withMatch('my_field', 'my_value');
+      builder.withSearchAfter('some_value');
+
+      const q = builder.build();
+
+      should.exist(q.search_after);
+      console.log(JSON.stringify(q, null, 2));
+      q.search_after.should.deep.equal(['some_value']);
+      should.exist(q.query);
+      q.query.should.deep.equal({ "bool": { "must": [{ "match": { "my_field": "my_value" }}]}});
+
+      done();
+    });
+
+    it('should successfully set a search_after field with a multiple values', function (done) {
+      builder.withMatch('my_field', 'my_value');
+      builder.withSearchAfter(['some_value', 'other_value']);
+
+      const q = builder.build();
+
+      should.exist(q.search_after);
+      console.log(JSON.stringify(q, null, 2));
+      q.search_after.should.deep.equal(['some_value', 'other_value']);
+      should.exist(q.query);
+      q.query.should.deep.equal({ "bool": { "must": [{ "match": { "my_field": "my_value" }}]}});
+
+      done();
+    });
+  });
+
   describe('withSort()', function () {
     it('should successfully append a sort field when provided with a valid field and order', function (done) {
       builder.withMatch("my_field", "my_value");
