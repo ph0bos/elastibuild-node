@@ -755,4 +755,114 @@ describe('lib/elasticsearch-query-builder', function () {
       done();
     });
   });
+
+  describe('withMustGeoCircle()', function () {
+    it('should successfully apply a must filter of geo_shape circle queries when provided with a latitude, longitude and radius', function (done) {
+      builder.withMustGeoCircle("my_field", 1.23, 4.56, "678km");
+
+      const q = builder.build();
+
+      console.log(JSON.stringify(q));
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.should.deep.equal(
+        {
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "geo_shape": {
+                    "my_field": {
+                      "relation": "intersects",
+                      "shape": {
+                        "coordinates": [
+                          4.56,
+                          1.23
+                        ],
+                        "radius": "678km",
+                        "type": "circle"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      );
+
+      done();
+    });
+
+    it('should successfully apply a must filter of geo_shape circle queries when provided with a latitude, longitude, radius and relation', function (done) {
+      builder.withMustGeoCircle("my_field", 1.23, 4.56, "678km", "contains");
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.should.deep.equal(
+        {
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "geo_shape": {
+                    "my_field": {
+                      "relation": "contains",
+                      "shape": {
+                        "coordinates": [
+                          4.56,
+                          1.23
+                        ],
+                        "radius": "678km",
+                        "type": "circle"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      );
+
+      done();
+    });
+  });
+
+  describe('withMustGeoLocation()', function () {
+    it('should successfully apply a must filter of geo_shape point queries when provided with a latitude and longitude', function (done) {
+      builder.withMustGeoLocation("my_field", 1.23, 4.56);
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.should.deep.equal(
+        {
+          "filter": {
+            "bool": {
+              "must": [
+                {
+                  "geo_shape": {
+                    "my_field": {
+                      "relation": "contains",
+                      "shape": {
+                        "coordinates": [
+                          4.56,
+                          1.23
+                        ],
+                        "type": "point"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      );
+
+      done();
+    });
+  });
 });
