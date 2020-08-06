@@ -304,6 +304,17 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should allow you to pass in a type', function (done) {
+      builder.withQueryString([ "headline", "description_text" ], "corbyn fire", { type: 'cross_fields' });
+
+      const q = builder.build();
+      should.exist(q.query.bool.must[0].query_string);
+      should.exist(q.query.bool.must[0].query_string.type);
+      q.query.bool.must[0].query_string.type.should.equal('cross_fields');
+
+      done();
+    });
   });
 
   describe('withShouldMatchQueryString', function () {
@@ -326,14 +337,27 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should allow you to pass in a type', function (done) {
+      builder.withShouldMatchQueryString([ "headline", "description_text" ], "corbyn fire", { type: 'cross_fields' });
+
+      const q = builder.build();
+      should.exist(q.query.bool.filter.bool.should[0].query_string);
+      should.exist(q.query.bool.filter.bool.should[0].query_string.type);
+      q.query.bool.filter.bool.should[0].query_string.type.should.equal('cross_fields');
+
+      done();
+    });
   });
 
   describe('withMatchQueryString()', function () {
     it('should successfully build a match query when provided with a valid array of fields, a query string and options', function (done) {
-      builder.withMatchQueryString([ "headline", "description_text" ], "corbyn AND fire", { boost: 100, use_dis_max: true });
+      builder.withMatchQueryString([ "headline", "description_text" ], "corbyn AND fire", { boost: 100, use_dis_max: true, type: 'cross_fields' });
 
       const q = builder.build();
       should.exist(q.query.bool.must[0].query_string);
+      should.exist(q.query.bool.must[0].query_string.type);
+      q.query.bool.must[0].query_string.type.should.equal('cross_fields');
 
       done();
     });
