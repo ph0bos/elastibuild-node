@@ -385,7 +385,7 @@ describe('lib/elasticsearch-query-builder', function () {
       should.exist(q.query.bool.must[0].more_like_this.fields);
 
       q.query.bool.must[0].more_like_this.fields[0].should.equal("my_field_1");
-      q.query.bool.must[0].more_like_this.docs[0]._id.should.equal("my-id");
+      q.query.bool.must[0].more_like_this.like[0]._id.should.equal("my-id");
       q.query.bool.must[0].more_like_this.min_term_freq.should.equal(3);
       q.query.bool.must[0].more_like_this.minimum_should_match.should.equal("30%");
 
@@ -393,14 +393,15 @@ describe('lib/elasticsearch-query-builder', function () {
     });
 
     it('should create a more like this (MLT) query when called with customised options', function (done) {
-      builder.withMoreLikeThis(["my_field_1", "my-field-2"], "my-id", { min_term_freq: 4, minimum_should_match: "90%" });
+      builder.withMoreLikeThis(["my_field_1", "my-field-2"], "my-id", { _index: 'my-index', min_term_freq: 4, minimum_should_match: "90%" });
 
       const q = builder.build();
 
       should.exist(q.query.bool.must[0].more_like_this);
       should.exist(q.query.bool.must[0].more_like_this.fields);
       q.query.bool.must[0].more_like_this.fields[0].should.equal("my_field_1");
-      q.query.bool.must[0].more_like_this.docs[0]._id.should.equal("my-id");
+      q.query.bool.must[0].more_like_this.like[0]._index.should.equal("my-index");
+      q.query.bool.must[0].more_like_this.like[0]._id.should.equal("my-id");
       q.query.bool.must[0].more_like_this.min_term_freq.should.equal(4);
       q.query.bool.must[0].more_like_this.minimum_should_match.should.equal("90%");
 
