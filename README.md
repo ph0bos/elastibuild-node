@@ -146,6 +146,11 @@ An array of values example:
 builder.withMatch('my_field_2', ['my_value_1', 'my_value_2']);
 ```
 
+An example using options to overide the query type:
+
+```js
+builder.withMatch('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withMatchAll(value);
 
@@ -185,6 +190,11 @@ An array of values example:
 builder.withMustMatch('my_field_2', ['my_value_1', 'my_value_2']);
 ```
 
+An example using options to overide the query type:
+
+```js
+builder.withMustMatch('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withShouldMatch(field, values);
 
@@ -205,6 +215,11 @@ An array of values example:
 builder.withShouldMatch('my_field_2', ['my_value_1', 'my_value_2']);
 ```
 
+An example using options to overide the query type:
+
+```js
+builder.withShouldMatch('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withNotMatch(field, values);
 
@@ -225,6 +240,11 @@ An array of values example:
 builder.withNotMatch('my_field_2', ['my_value_1', 'my_value_2']);
 ```
 
+An example using options to overide the query type:
+
+```js
+builder.withNotMatch('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withGeoDistance(fields, lat, long, distance);
 
@@ -351,6 +371,7 @@ Applies a must filter to the query.
 
 * `field` (`String`)
 * `values` (`Array` || `String`)
+* `options` (`Object`)
 
 A single value example:
 
@@ -358,6 +379,17 @@ A single value example:
 builder.withMustFilter('my_field', 'my_value');
 ```
 
+An array of values example:
+
+```js
+builder.withMustFilter('my_field', ['my_value_1', 'my_value_2']);
+```
+
+An example using options to overide the query type:
+
+```js
+builder.withMustFilter('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withMustFilterObject(partialQueryObject);
 
@@ -397,6 +429,7 @@ Applies a should filter to the query.
 
 * `field` (`String`)
 * `values` (`Array` || `String`)
+* `options` (`Object`)
 
 A single value example:
 
@@ -404,6 +437,17 @@ A single value example:
 builder.withShouldFilter('my_field', 'my_value');
 ```
 
+An array of values example:
+
+```js
+builder.withShouldFilter('my_field', ['my_value_1', 'my_value_2']);
+```
+
+An example using options to overide the query type:
+
+```js
+builder.withShouldFilter('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withMustNotFilter(field, values);
 
@@ -411,6 +455,7 @@ Applies a must_not filter to the query.
 
 * `field` (`String`)
 * `values` (`Array` || `String`)
+* `options` (`Object`)
 
 A single value example:
 
@@ -418,6 +463,17 @@ A single value example:
 builder.withMustNotFilter('my_field', 'my_value');
 ```
 
+An array of values example:
+
+```js
+builder.withMustNotFilter('my_field', ['my_value_1', 'my_value_2']);
+```
+
+An example using options to overide the query type:
+
+```js
+builder.withMustNotFilter('my_field', { gte: '2021-01-11' }, { subQueryType: 'range' });
+```
 
 ### ElastiBuild.withRange(field, values);
 
@@ -529,12 +585,11 @@ This example would produce the following console output:
 }
 ```
 
-### ElastiBuild.withFieldExist(field, options);
+### ElastiBuild.withFieldExist(field);
 
 Returns documents containing the provided field.
 
 * `field` (`String`)
-* `options` (`Object`)
 
 ```js
 builder.withFieldExist("my_field");
