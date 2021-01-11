@@ -45,9 +45,41 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should successfully build a simple match query when provided with a field and value for a range', function (done) {
+      
+      builder.withMatch(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must[0]);
+
+      q.query.bool.must[0].should.deep.equal({ "range": { "my_field": { "lt": "2021-01-07" } } });
+
+      done();
+    });
   });
 
   describe('withMustMatch()', function () {
+    it('should successfully build a simple match query when provided with a simple field and value', function (done) {
+      builder.withMustMatch("my_field", "my_value");
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must[0].match);
+      q.query.bool.must[0].match.should.have.property('my_field');
+
+      done();
+    });
+
     it('should successfully build a bool, must, match query by building an array of match queries', function (done) {
       builder.withMustMatch("my_field", [ "my_value_1", "my_value_2" ]);
 
@@ -58,6 +90,116 @@ describe('lib/elasticsearch-query-builder', function () {
 
       q.query.bool.must[0].match.my_field.should.equal("my_value_1");
       q.query.bool.must[1].match.my_field.should.equal("my_value_2");
+
+      done();
+    });
+
+    it('should successfully build a simple match query when provided with a field and value for a range', function (done) {
+      builder.withMustMatch(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must[0]);
+
+      q.query.bool.must[0].should.deep.equal({ "range": { "my_field": { "lt": "2021-01-07" } } });
+
+      done();
+    });
+  });
+
+  describe('withNotMatch()', function () {
+    it('should successfully build a simple match query when provided with a simple field and value', function (done) {
+      builder.withNotMatch("my_field", "my_value");
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must_not[0].match);
+      q.query.bool.must_not[0].match.should.have.property('my_field');
+
+      done();
+    });
+
+    it('should successfully build a bool, must, match query by building an array of match queries', function (done) {
+      builder.withNotMatch("my_field", [ "my_value_1", "my_value_2" ]);
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must_not[0].terms);
+
+      q.query.bool.must_not[0].terms.my_field.should.deep.equal([ "my_value_1", "my_value_2" ]);
+
+      done();
+    });
+
+    it('should successfully build a simple match query when provided with a field and value for a range', function (done) {
+      builder.withNotMatch(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.must_not[0]);
+
+      q.query.bool.must_not[0].should.deep.equal({ "range": { "my_field": { "lt": "2021-01-07" } } });
+
+      done();
+    });
+  });
+
+  describe('withShouldMatch()', function () {
+    it('should successfully build a simple match query when provided with a simple field and value', function (done) {
+      builder.withShouldMatch("my_field", "my_value");
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.should[0].match);
+      q.query.bool.should[0].match.should.have.property('my_field');
+
+      done();
+    });
+
+    it('should successfully build a bool, must, match query by building an array of match queries', function (done) {
+      builder.withShouldMatch("my_field", [ "my_value_1", "my_value_2" ]);
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.should[0].terms);
+
+      q.query.bool.should[0].terms.my_field.query.should.deep.equal([ "my_value_1", "my_value_2" ]);
+
+      done();
+    });
+
+    it('should successfully build a simple match query when provided with a field and value for a range', function (done) {
+      builder.withShouldMatch(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.query.bool.should[0].range);
+
+      q.query.bool.should[0].range.should.deep.equal({ "my_field": { query: { "lt": "2021-01-07" } } });
 
       done();
     });
@@ -455,6 +597,33 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should successfully apply a must filter when provided with a property and array value for a range', function (done) {
+      builder.withMatch("my_field", "my_value");
+      builder.withSortUri("my_field:asc");
+      builder.withMustFilter(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.sort);
+      q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+      should.exist(q.query.bool.must);
+      q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.filter.bool.should.deep.equal({ "must": [{ "range": { "my_field": { "lt": "2021-01-07" } } }]});
+
+      done();
+    });
   });
 
   describe('withMustNotFilter()', function () {
@@ -481,6 +650,33 @@ describe('lib/elasticsearch-query-builder', function () {
 
       done();
     });
+
+    it('should successfully apply a must_not filter when provided with a property and array value for a range', function (done) {
+      builder.withMatch("my_field", "my_value");
+      builder.withSortUri("my_field:asc");
+      builder.withMustNotFilter(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.sort);
+      q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+      should.exist(q.query.bool.must);
+      q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.filter.bool.should.deep.equal({ "must_not": [{ "range": { "my_field": { "lt": "2021-01-07" } } }] });
+
+      done();
+    });
   });
 
   describe('withShouldFilter()', function () {
@@ -504,6 +700,33 @@ describe('lib/elasticsearch-query-builder', function () {
 
       should.exist(q.query.bool.filter);
       q.query.bool.filter.should.deep.equal({ "bool": { "should": [{ "terms": { "object.code": [ "pacontent:paservice:news.story.composite", "pacontent:paservice:sport.story.composite" ] }}]}});
+
+      done();
+    });
+
+    it('should successfully apply a should filter when provided with a property and array value for a range', function (done) {
+      builder.withMatch("my_field", "my_value");
+      builder.withSortUri("my_field:asc");
+      builder.withShouldFilter(
+        'my_field', 
+        {
+          lt: '2021-01-07'
+        },
+        {
+          subQueryType: 'range'
+        }
+      );
+
+      const q = builder.build();
+
+      should.exist(q.sort);
+      q.sort.should.deep.equal([{ "my_field": { "order": "asc" }}]);
+
+      should.exist(q.query.bool.must);
+      q.query.bool.must.should.deep.equal([{ "match": { "my_field": "my_value" }}]);
+
+      should.exist(q.query.bool.filter);
+      q.query.bool.filter.should.deep.equal({ "bool": { "should": [{ "range": { "my_field": { "lt": "2021-01-07" } } }]}});
 
       done();
     });
